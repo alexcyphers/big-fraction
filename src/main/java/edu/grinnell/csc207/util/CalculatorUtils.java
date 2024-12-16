@@ -56,4 +56,57 @@ public class CalculatorUtils {
       return false;
     } // try/catch
   } // isValidFraction(String)
+
+  public static BigFraction readExpression(String[] expression, BFRegisterSet registerSet) {
+    BigFraction result = null;
+
+    for (int i = 0; i < expression.length; i++) {
+      Boolean isCharAlpha = false;
+      // Check if the first character is lowercase.
+      if (!(expression[i].charAt(0) < 'a' || expression[i].charAt(0) > 'z')) {
+        isCharAlpha = true;
+      } // if
+
+      if (expression.length == 1) {
+        if (isCharAlpha) {
+          if (registerSet.get(expression[i].charAt(0)) != null) {
+            result = registerSet.get(expression[i].charAt(0));
+          } else {
+            throw new IllegalArgumentException();
+          } // if/else
+        } else if (isValidFraction(expression[i])) {
+          result = new BigFraction(expression[i]);
+        } else {
+          throw new IllegalArgumentException();
+        } // if/else
+        break;
+      } // if
+
+
+      if (isOperator(expression[i])) {
+        if (result == null) {
+            throw new IllegalArgumentException();
+        } // if
+
+        BigFraction next = null;
+
+        if (i + 1 < expression.length) {
+          next = getValue(expression[i + 1], registerSet);
+          if (next == null) {
+            throw new IllegalArgumentException();
+          } // if
+        }
+        result = compute(expression[i], result, next);
+        i++;
+      } else if (result == null) {
+        result = getValue(expression[i], registerSet);
+        if (result == null) {
+          throw new IllegalArgumentException();
+        } // if
+      } else {
+        throw new IllegalArgumentException();
+      } // if/else
+    } // for-loop
+    return result;
+  }
 }

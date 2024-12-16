@@ -62,59 +62,7 @@ public class InteractiveCalculator {
           continue;
         } else {
           String[] expression = line.split(" ");
-          BigFraction result = null;
-  
-          for (int i = 0; i < expression.length; i++) {
-            Boolean isCharAlpha = false;
-            // Check if the first character is lowercase.
-            if (!(expression[i].charAt(0) < 'a' || expression[i].charAt(0) > 'z')) {
-              isCharAlpha = true;
-            } // if
-  
-            if (expression.length == 1) {
-              if (isCharAlpha) {
-                if (registerSet.get(expression[i].charAt(0)) != null) {
-                  result = registerSet.get(expression[i].charAt(0));
-                } else {
-                  pen.println("ERROR [Register not initialized]");
-                } // if/else
-              } else if (CalculatorUtils.isValidFraction(expression[i])) {
-                result = new BigFraction(expression[i]);
-              } else {
-                pen.println("ERROR [Invalid expression]");
-                break;
-              } // if/else
-              break;
-            } // if
-  
-            if (CalculatorUtils.isOperator(expression[i])) {
-              if (result == null) {
-                result = null;
-                break;
-              } // if
-  
-              BigFraction next = null;
-  
-              if (i + 1 < expression.length) {
-                next = CalculatorUtils.getValue(expression[i + 1], registerSet);
-                if (next == null) {
-                  result = null;
-                  break;
-                } // if
-              }
-              result = CalculatorUtils.compute(expression[i], result, next);
-              i++;
-            } else if (result == null) {
-              result = CalculatorUtils.getValue(expression[i], registerSet);
-              if (result == null) {
-                result = null;
-                break;
-              } // if
-            } else {
-              result = null;
-              break;
-            } // if/else
-          } // for-loop
+          BigFraction result = CalculatorUtils.readExpression(expression, registerSet);
           calc.clear();
           calc.add(result);
           pen.println(result);
