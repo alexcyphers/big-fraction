@@ -20,7 +20,6 @@ public class BFCalculator {
 
     //gets the last computed value (returns 0 if there is no such value).
     public BigFraction get() {
-        System.out.println(fract);
         return fract;
     }
 
