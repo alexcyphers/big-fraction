@@ -86,17 +86,20 @@ public class InteractiveCalculator{
                 result = registerSet.get(expression[i].charAt(0));
               } else {
                 pen.println("ERROR [Register not initialized]");
+                continue;
               } // if/else
             } else if (isValidFraction(expression[i])) {
               result = new BigFraction(expression[i]);
             } else {
               pen.println("ERROR [Invalid expression]");
+              continue;
             } // if/else
             continue;
           } // if
 
           if (expression.length < 3 || !isOperator(expression[1])) {
             pen.println("ERROR [Invalid expression]");
+            continue;
           } // if
           // Check if current expression is a register
           if (isCharAlpha) {
@@ -138,14 +141,16 @@ public class InteractiveCalculator{
               result = new BigFraction(expression[i]);
             } else {
               pen.println("ERROR [Invalid expression]");
+              continue;
             }
           } else {
             pen.println("ERROR [Invalid expression]");
+            continue;
           } // if/else
         } // for-loop
+        calc.clear();
         calc.add(result);
         pen.println(result);
-        calc.clear();
       } // if/else
     } // while-loop
   } // main

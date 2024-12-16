@@ -261,7 +261,7 @@ public class BigFraction {
    * @return a bigfraction representing the fractional remainder
    * from simplifying
    */
-  public BigFraction fractional(){
+  public BigFraction fractional() {
     return new BigFraction(this.num.mod(this.denom), this.denom);
   } //fractional()
 

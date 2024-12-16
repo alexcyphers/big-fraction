@@ -20,7 +20,8 @@ public class BFCalculator {
 
     //gets the last computed value (returns 0 if there is no such value).
     public BigFraction get() {
-        return new BigFraction(fract.num, fract.denom);
+        System.out.println(fract);
+        return fract;
     }
 
     //adds val to the last computed value.
@@ -48,7 +49,6 @@ public class BFCalculator {
 
     //resets the last computed value to 0.
     public void clear(){
-        BigFraction zero = new BigFraction(0, 1);
-        this.multiply(zero);
+      this.fract = new BigFraction(0, 1);
     }
 }
