@@ -55,12 +55,32 @@ public class InteractiveCalculator{
 
       
       if (line.startsWith("STORE")) {
+        if (line.length() > 6 || (line.charAt(6) < 'a' || line.charAt(6) > 'z')) {
+          pen.println("Invalid Register");
+        } // if
         registerSet.store(line.charAt(6), calc.get());
         pen.println("STORED");
       } else {
         String[] expression = line.split(" ");
         BigFraction result = null;
-        for (int i = 0; i < expression.length; i++) {
+        for (int i = 0; i < expression.length - 1; i++) {
+          // Check if current expression is a register
+          if (!(expression[i].charAt(0) < 'a' || expression[i].charAt(0) > 'z')) {
+            if (inRegister(expression[i].charAt(0), registerSet)) {
+              expression[i] = registerSet.get(expression[i].charAt(0)).toString();
+            } else {
+              pen.println("Invalid register");
+            } // if
+          } // if
+
+          if (!(expression[i + 1].charAt(0) < 'a' || expression[i + 1].charAt(0) > 'z')) {
+            if (inRegister(expression[i + 1].charAt(0), registerSet)) {
+              expression[i + 1] = registerSet.get(expression[i + 1].charAt(0)).toString();
+            } else {
+              pen.println("Invalid register");
+            } // if
+          } // if
+
            if (isOperator(expression[i])) {
              BigFraction next = new BigFraction(expression[i+1]);
              result = compute(expression[i], result, next);
@@ -92,10 +112,11 @@ public class InteractiveCalculator{
     } else {
       throw new IllegalArgumentException("Not an operator: " + operator);
     } // if/else
-  }
+  } // compute(String, BigFraction, BigFraction)
 
 
-  private static Boolean isOperator(String arg){
+  private static Boolean isOperator(String arg) {
+
     if (arg.equals("+")) {
       return true;
     } else if (arg.equals("-")) {
@@ -108,4 +129,13 @@ public class InteractiveCalculator{
       return false;
     } // if/else
   } // isOperator(String)
+
+
+  public static Boolean inRegister(char register, BFRegisterSet registerSet) {
+    if (registerSet.get(register) != null) {
+      return true; 
+    } else {
+      return false;
+    } // if/else
+  } // inRegister(char, BFRegisterSet)
 }

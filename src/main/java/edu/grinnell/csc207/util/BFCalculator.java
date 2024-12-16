@@ -51,5 +51,4 @@ public class BFCalculator {
         BigFraction zero = new BigFraction(0, 1);
         this.multiply(zero);
     }
-    
 }
