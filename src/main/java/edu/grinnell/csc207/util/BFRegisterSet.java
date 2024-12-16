@@ -21,17 +21,13 @@ public class BFRegisterSet {
 
   // - stores the given value in the specified register.
   public void store(char register, BigFraction val) {
-    for (int i = 0; i < 26; i++) {
-      if ((int)register - 97 == i) {
-        this.registers[i] = val;
-      } // if
-    } // for-loop
+    this.registers[register - 'a'] = val;
   }
 
 
   // retrieves the value from the given register.
   public BigFraction get(char register) {
-    return registers[(int)register - 97];
+    return this.registers[register - 'a'];
   }
 }
 

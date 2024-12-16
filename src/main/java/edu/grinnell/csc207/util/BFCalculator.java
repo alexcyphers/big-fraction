@@ -19,32 +19,29 @@ public class BFCalculator {
     
 
     //gets the last computed value (returns 0 if there is no such value).
-    public BigFraction get(){
+    public BigFraction get() {
         return new BigFraction(fract.num, fract.denom);
     } 
 
     //adds val to the last computed value.
-    public void add(BigFraction val){
-        this.add(val);
+    public void add(BigFraction val) {
+        this.fract = this.fract.add(val);
     }
 
     //subtracts val from the last computed value.
-    public void subtract(BigFraction val){
-
-        this.subtract(val);
+    public void subtract(BigFraction val) {
+        this.fract = this.fract.subtract(val);
     }
 
     //multiplies the last computed value by val.
-    public void multiply(BigFraction val){
-        this.multiply(val);
+    public void multiply(BigFraction val) {
+        this.fract = this.fract.multiply(val);
     }
 
     //divides the last computed value by val.
-    public void divide(BigFraction val){
-        this.divide(val);
+    public void divide(BigFraction val) {
+        this.fract = this.fract.divide(val);
     }
-
-
 
     //resets the last computed value to 0.
     public void clear(){

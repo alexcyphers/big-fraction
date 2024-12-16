@@ -53,16 +53,24 @@ public class InteractiveCalculator{
       pen.flush();
       String line = eyes.nextLine();
 
+      if (line.startsWith("QUIT")) {
+        pen.close();
+        eyes.close();
+        return;
+      } // if
       
       if (line.startsWith("STORE")) {
-        if (line.length() > 6 || (line.charAt(6) < 'a' || line.charAt(6) > 'z')) {
+        if (line.length() <= 6 || (line.charAt(6) < 'a' || line.charAt(6) > 'z')) {
           pen.println("Invalid Register");
+          continue;
         } // if
         registerSet.store(line.charAt(6), calc.get());
         pen.println("STORED");
+        continue;
       } else {
         String[] expression = line.split(" ");
         BigFraction result = null;
+
         for (int i = 0; i < expression.length - 1; i++) {
           // Check if current expression is a register
           if (!(expression[i].charAt(0) < 'a' || expression[i].charAt(0) > 'z')) {
@@ -70,28 +78,38 @@ public class InteractiveCalculator{
               expression[i] = registerSet.get(expression[i].charAt(0)).toString();
             } else {
               pen.println("Invalid register");
+              continue;
             } // if
           } // if
 
-          if (!(expression[i + 1].charAt(0) < 'a' || expression[i + 1].charAt(0) > 'z')) {
-            if (inRegister(expression[i + 1].charAt(0), registerSet)) {
-              expression[i + 1] = registerSet.get(expression[i + 1].charAt(0)).toString();
+          if (isOperator(expression[i])) {
+            if (result == null) {
+              pen.println("Invalid Expression, resilt is null");
+              continue;
+            } // if
+            BigFraction next;
+
+            if (!(expression[i + 1].charAt(0) < 'a' || expression[i + 1].charAt(0) > 'z')) {
+              if (inRegister(expression[i + 1].charAt(0), registerSet)) {
+                next = registerSet.get(expression[i + 1].charAt(0));
+              } else {
+                pen.println("Invalid register");
+                continue;
+              } // if/else
             } else {
-              pen.println("Invalid register");
-            } // if
-          } // if
-
-           if (isOperator(expression[i])) {
-             BigFraction next = new BigFraction(expression[i+1]);
-             result = compute(expression[i], result, next);
-             i++;
-           } else if (result == null) {
-             result = new BigFraction(expression[i]);
-           } else {
+              next = new BigFraction(expression[i + 1]);
+            }
+            result = compute(expression[i], result, next);
+            i++;
+          } else if (result == null) {
+            result = new BigFraction(expression[i]);
+          } else {
             pen.println("Invalid Expression");
           } // if/else
         } // for-loop
         pen.println(result);
+        calc.clear();
+        calc.add(result);
       } // if/else
     } // while-loop
   } // main
