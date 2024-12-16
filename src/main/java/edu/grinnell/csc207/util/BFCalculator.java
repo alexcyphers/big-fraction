@@ -21,7 +21,7 @@ public class BFCalculator {
     //gets the last computed value (returns 0 if there is no such value).
     public BigFraction get() {
         return new BigFraction(fract.num, fract.denom);
-    } 
+    }
 
     //adds val to the last computed value.
     public void add(BigFraction val) {
@@ -40,6 +40,9 @@ public class BFCalculator {
 
     //divides the last computed value by val.
     public void divide(BigFraction val) {
+        if (val.numerator().equals(val.denominator())) {
+          throw new ArithmeticException("Can't divide by zero");
+        }
         this.fract = this.fract.divide(val);
     }
 

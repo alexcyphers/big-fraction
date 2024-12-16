@@ -53,6 +53,8 @@ public class InteractiveCalculator{
       pen.flush();
       String line = eyes.nextLine();
 
+
+
       if (line.startsWith("QUIT")) {
         pen.close();
         eyes.close();
@@ -61,39 +63,69 @@ public class InteractiveCalculator{
       
       if (line.startsWith("STORE")) {
         if (line.length() <= 6 || (line.charAt(6) < 'a' || line.charAt(6) > 'z')) {
-          pen.println("Invalid Register");
+          pen.println("Error: [Invalid expression]");
           continue;
         } // if
         registerSet.store(line.charAt(6), calc.get());
-        pen.println("STORED");
+        pen.println("STORED " + calc.get());
         continue;
       } else {
         String[] expression = line.split(" ");
         BigFraction result = null;
 
-        for (int i = 0; i < expression.length - 1; i++) {
-          // Check if current expression is a register
+        for (int i = 0; i < expression.length; i++) {
+          Boolean isCharAlpha = false;
+          // Check if the first character is lowercase.
           if (!(expression[i].charAt(0) < 'a' || expression[i].charAt(0) > 'z')) {
-            if (inRegister(expression[i].charAt(0), registerSet)) {
+            isCharAlpha = true;
+          } // if
+
+          if (expression.length == 1) {
+            if (isCharAlpha) {
+              if (isInRegister(expression[i].charAt(0), registerSet)) {
+                result = registerSet.get(expression[i].charAt(0));
+              } else {
+                pen.println("ERROR [Register not initialized]");
+              } // if/else
+            } else if (isValidFraction(expression[i])) {
+              result = new BigFraction(expression[i]);
+            } else {
+              pen.println("ERROR [Invalid expression]");
+            } // if/else
+            continue;
+          } // if
+
+          if (expression.length < 3 || !isOperator(expression[1])) {
+            pen.println("ERROR [Invalid expression]");
+          } // if
+          // Check if current expression is a register
+          if (isCharAlpha) {
+            if (isInRegister(expression[i].charAt(0), registerSet)) {
               expression[i] = registerSet.get(expression[i].charAt(0)).toString();
             } else {
-              pen.println("Invalid register");
+              pen.println("ERROR [Register not initialized]");
               continue;
             } // if
           } // if
 
           if (isOperator(expression[i])) {
-            if (result == null) {
-              pen.println("Invalid Expression, resilt is null");
+            if (!isValidFraction(expression[i + 1])) {
+              pen.println("ERROR [Invalid expression]");
               continue;
             } // if
+
+            if (result == null) {
+              pen.println("ERROR [Invalid expression]");
+              continue;
+            } // if
+
             BigFraction next;
 
-            if (!(expression[i + 1].charAt(0) < 'a' || expression[i + 1].charAt(0) > 'z')) {
-              if (inRegister(expression[i + 1].charAt(0), registerSet)) {
+            if (isCharAlpha) {
+              if (isInRegister(expression[i + 1].charAt(0), registerSet)) {
                 next = registerSet.get(expression[i + 1].charAt(0));
               } else {
-                pen.println("Invalid register");
+                pen.println("ERROR [Register not initialized]");
                 continue;
               } // if/else
             } else {
@@ -102,14 +134,18 @@ public class InteractiveCalculator{
             result = compute(expression[i], result, next);
             i++;
           } else if (result == null) {
-            result = new BigFraction(expression[i]);
+            if (isValidFraction(expression[i])) {
+              result = new BigFraction(expression[i]);
+            } else {
+              pen.println("ERROR [Invalid expression]");
+            }
           } else {
-            pen.println("Invalid Expression");
+            pen.println("ERROR [Invalid expression]");
           } // if/else
         } // for-loop
+        calc.add(result);
         pen.println(result);
         calc.clear();
-        calc.add(result);
       } // if/else
     } // while-loop
   } // main
@@ -149,11 +185,25 @@ public class InteractiveCalculator{
   } // isOperator(String)
 
 
-  public static Boolean inRegister(char register, BFRegisterSet registerSet) {
+  public static Boolean isInRegister(char register, BFRegisterSet registerSet) {
     if (registerSet.get(register) != null) {
       return true; 
     } else {
       return false;
     } // if/else
   } // inRegister(char, BFRegisterSet)
+
+  private static Boolean isValidFraction(String fraction) {
+    try {
+      if (fraction.contains("/")) {
+        Integer.parseInt(fraction.substring(0, fraction.indexOf((int)'/')));
+        Integer.parseInt(fraction.substring(fraction.indexOf((int)'/') + 1));
+      } else {
+        Integer.parseInt(fraction);
+      } // if/else
+      return true;
+    } catch (Exception e) {
+      return false;
+    } // try/catch
+  } // isValidFraction(String)
 }

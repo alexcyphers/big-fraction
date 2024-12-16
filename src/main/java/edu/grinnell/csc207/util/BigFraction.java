@@ -72,6 +72,11 @@ public class BigFraction {
   public BigFraction(BigInteger numerator, BigInteger denominator) {
     this.num = numerator;
     this.denom = denominator;
+
+    if (this.denom.compareTo(BigInteger.ZERO) < 0) {
+      this.num = this.num.negate();
+      this.denom = this.denom.negate();
+    } // if
   } // BigFraction(BigInteger, BigInteger)
 
 
@@ -88,6 +93,11 @@ public class BigFraction {
   public BigFraction(int numerator, int denominator) {
     this.num = BigInteger.valueOf(numerator);
     this.denom = BigInteger.valueOf(denominator);
+
+    if (this.denom.compareTo(BigInteger.ZERO) < 0) {
+      this.num = this.num.negate();
+      this.denom = this.denom.negate();
+    } // if
   } // BigFraction(int, int)
 
 
@@ -100,8 +110,19 @@ public class BigFraction {
    *   The fraction in string form
    */
   public BigFraction(String str) {
-    this.num = BigInteger.valueOf(Integer.parseInt(str.substring(0, str.indexOf((int)'/'))));
-    this.denom = BigInteger.valueOf(Integer.parseInt(str.substring(str.indexOf((int)'/') + 1)));
+    if (str.contains("/")) {
+      this.num = BigInteger.valueOf(Integer.parseInt(str.substring(0, str.indexOf((int)'/'))));
+      this.denom = BigInteger.valueOf(Integer.parseInt(str.substring(str.indexOf((int)'/') + 1)));
+    } else {
+      this.num = BigInteger.valueOf(Integer.parseInt(str));
+      this.denom = BigInteger.ONE;
+    } // if/else
+    
+    // Make negative
+    if (this.denom.compareTo(BigInteger.ZERO) < 0) {
+      this.num = this.num.negate();
+      this.denom = this.denom.negate();
+    } // if
   } // BigFraction
 
 
@@ -175,9 +196,11 @@ public class BigFraction {
       return "0";
     } // if it's zero
 
-    // Lump together the string represention of the numerator,
-    // a slash, and the string representation of the denominator
-    // return this.num.toString().concat("/").concat(this.denom.toString());
+    // If it can be a whole number.
+    if (this.num.mod(this.denom).equals(BigInteger.ZERO)) {
+      return this.num.divide(this.denom).toString();
+    } // if
+
     return this.num + "/" + this.denom;
   } // toString()
 
