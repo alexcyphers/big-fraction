@@ -104,6 +104,7 @@ public class InteractiveCalculator{
           if (isOperator(expression[i])) {
             if (result == null) {
               pen.println("ERROR [Invalid expression]");
+              result = null;
               break;
             } // if
 
@@ -113,6 +114,7 @@ public class InteractiveCalculator{
               next = getValue(expression[i + 1], registerSet);
               if (next == null) {
                 pen.println("ERROR [Invalid expression]");
+                result = null;
                 break;
               } // if
             }
@@ -122,10 +124,12 @@ public class InteractiveCalculator{
             result = getValue(expression[i], registerSet);
             if (result == null) {
               pen.println("ERROR [Invalid expression]");
+              result = null;
               break;
             } // if
           } else {
             pen.println("ERROR [Invalid expression]");
+            result = null;
             break;
           } // if/else
         } // for-loop
