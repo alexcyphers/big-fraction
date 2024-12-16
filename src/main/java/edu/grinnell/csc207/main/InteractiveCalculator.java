@@ -57,7 +57,7 @@ public class InteractiveCalculator {
             continue;
           } // if
           registerSet.store(line.charAt(REGISTER_INDEX), calc.get());
-          pen.println("STORED " + calc.get());
+          pen.println("STORED");
           continue;
         } else {
           String[] expression = line.split(" ");
