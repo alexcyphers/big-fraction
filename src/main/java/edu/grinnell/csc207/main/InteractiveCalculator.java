@@ -5,6 +5,7 @@ import edu.grinnell.csc207.util.BigFraction;
 import edu.grinnell.csc207.util.BFRegisterSet;
 import edu.grinnell.csc207.util.BFCalculator;
 import java.io.PrintWriter;
+import java.math.BigInteger;
 import java.util.Scanner;
 
 
@@ -42,95 +43,69 @@ public class InteractiveCalculator{
 
     PrintWriter pen = new PrintWriter(System.out, true);
     Scanner eyes = new Scanner(System.in);
-    pen.println("Have not figured out scanner yet");
-    pen.print(">");
-    pen.flush();
-    BigFraction sum = new BigFraction(0, 1);
-    String lines = eyes.nextLine();
-    String[] values = lines.split(" ");
-    eyes.close();
-
-
-    
-    String constructor = "";
-
-    for (int i = 0; i<values.length; i++) {
-
-
-      if(i % 2 == 0 && isConstructor(values[i])){
-        System.err.println("ERROR [Invalid expression]");
-      }
-      else if(i % 2 == 1 && !isConstructor(values[i])){
-        System.err.println("ERROR [Invalid expression]");
-      }
-
-      if(i == 0){
-        sum = sum.add(new BigFraction(values[i]));
-      }
-
-
-      if(args[i].equals("+")){
-        constructor = new String("+");
-        continue;
-      }
-      else if(args[i].equals("-")){
-        constructor = new String("-");
-        continue;
-      }
-      else if(args[i].equals("*")){
-        constructor = new String("*");
-        continue;
-      }
-      else if(args[i].equals("/")){
-        constructor = new String("/");
-        continue;
-      }
-
-
-      if(constructor.equals("+")){
-        sum = sum.add(new BigFraction(values[i]));
-      }
-      else if(constructor.equals("-")){
-        sum = sum.subtract(new BigFraction(values[i]));
-      }
-      else if(constructor.equals("/")){
-        sum = sum.divide(new BigFraction(values[i]));
-      }
-      else if(constructor.equals("*")){
-        sum = sum.multiply(new BigFraction(values[i]));
-      }
-      
-
-      
-    } // for
-
-
+    BFCalculator calc = new BFCalculator();
+    BFRegisterSet registerSet = new BFRegisterSet();
     
 
-} // class Interactive Calculator
+    
+    while (true) {
+      pen.print("> ");
+      pen.flush();
+      String line = eyes.nextLine();
+
+      
+      if (line.startsWith("STORE")) {
+        registerSet.store(line.charAt(6), calc.get());
+        pen.println("STORED");
+      } else {
+        String[] expression = line.split(" ");
+        BigFraction result = null;
+        for (int i = 0; i < expression.length; i++) {
+           if (isOperator(expression[i])) {
+             BigFraction next = new BigFraction(expression[i+1]);
+             result = compute(expression[i], result, next);
+             i++;
+           } else if (result == null) {
+             result = new BigFraction(expression[i]);
+           } else {
+            pen.println("Invalid Expression");
+          } // if/else
+        } // for-loop
+        pen.println(result);
+      } // if/else
+    } // while-loop
+  } // main
 
 
+  public static BigFraction compute(String operator, BigFraction num1, BigFraction num2) {
+    if (operator.equals("+")) {
+      return num1.add(num2);
+    } else if (operator.equals("-")) {
+      return num1.subtract(num2);
+    } else if(operator.equals("/")) {
+      if (num2.numerator().equals(BigInteger.ZERO)) {
+        throw new ArithmeticException("Can't divide by zero");
+      } // if
+      return num1.divide(num2);
+    } else if (operator.equals("*")) {
+      return num1.multiply(num2);
+    } else {
+      throw new IllegalArgumentException("Not an operator: " + operator);
+    } // if/else
+  }
 
- private static Boolean isConstructor(String arg){
-   if(arg.equals("+")){
-     return true;
-   }
-   else if(arg.equals("-")){
-     return true;
-   }
-   else if(arg.equals("/")){
-     return true;
-   }
-   else if(arg.equals("*")){
-     return true;
-   }
 
-   return false;
-
- }
+  private static Boolean isOperator(String arg){
+    if (arg.equals("+")) {
+      return true;
+    } else if (arg.equals("-")) {
+      return true;
+    } else if(arg.equals("/")) {
+      return true;
+    } else if (arg.equals("*")) {
+      return true;
+    } else {
+      return false;
+    } // if/else
+  } // isOperator(String)
 }
-/*
- mvn compile -q
- mvn package -q
- java -jar target/big-fraction-1.0.jar
- */

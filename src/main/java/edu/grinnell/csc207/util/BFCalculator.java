@@ -15,21 +15,17 @@ package edu.grinnell.csc207.util;
 public class BFCalculator {
 
     //Fields
-    BigFraction fract = new BigFraction(0,1);
+    private BigFraction fract = new BigFraction(0,1);
     
 
     //gets the last computed value (returns 0 if there is no such value).
     public BigFraction get(){
-
         return new BigFraction(fract.num, fract.denom);
-
     } 
 
     //adds val to the last computed value.
     public void add(BigFraction val){
-
         this.add(val);
-
     }
 
     //subtracts val from the last computed value.
@@ -46,16 +42,14 @@ public class BFCalculator {
     //divides the last computed value by val.
     public void divide(BigFraction val){
         this.divide(val);
-
     }
+
+
 
     //resets the last computed value to 0.
     public void clear(){
-
         BigFraction zero = new BigFraction(0, 1);
-
         this.multiply(zero);
-
     }
     
 }

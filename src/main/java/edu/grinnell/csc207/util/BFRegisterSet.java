@@ -15,12 +15,12 @@ public class BFRegisterSet {
     
 
     
-    BigFraction [] arr = new BigFraction[26];
+    private BigFraction [] arr = new BigFraction[26];
 
     public void store(char register, BigFraction val){ // - stores the given value in the specified register.
 
-        for(int i = 0; i<26; i++){
-            if((int)register-97==i){
+        for (int i = 0; i<26; i++){
+            if ((int)register-97==i){
                 this.arr[i] = val;
             }
         }
