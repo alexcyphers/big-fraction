@@ -9,7 +9,6 @@ import java.math.BigInteger;
  *
  * @author Alex Cyphers
  */
-
 public class BigFraction {
 
   // +------------------+---------------------------------------------

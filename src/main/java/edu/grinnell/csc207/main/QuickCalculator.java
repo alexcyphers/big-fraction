@@ -13,7 +13,6 @@ import java.io.PrintWriter;
  *
  * @author Alex Cyphers
  */
-
 public class QuickCalculator {
 
   /**
