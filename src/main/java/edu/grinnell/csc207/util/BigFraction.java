@@ -3,9 +3,9 @@ import java.math.BigInteger;
 
 
 /**
- * Implements the fractions used in the program, and allows the objects to be called. It also contains
- * different operations that allow you to add multiply divide or subtract the fractions. It also simplifies
- * them.
+ * Implements the fractions used in the program, and allows the objects to be called.
+ * It also contains different operations that allow you to add multiply divide or
+ * subtract the fractions. It also simplifies them.
  *
  * @author Alex Cyphers
  */
@@ -28,30 +28,17 @@ public class BigFraction {
    */
 
 
-  // +-----------+---------------------------------------------------
-  // | Constants |
-  // +-----------+
-
-
-  /** The default numerator when creating fractions. */
-  private static final BigInteger DEFAULT_NUMERATOR = BigInteger.valueOf(2);
-
-
-  /** The default denominator when creating fractions. */
-  private static final BigInteger DEFAULT_DENOMINATOR = BigInteger.valueOf(7);
-
-
   // +--------+-------------------------------------------------------
   // | Fields |
   // +--------+
 
 
   /** The numerator of the fraction. Can be positive, zero or negative. */
-  BigInteger num;
+  private BigInteger num;
 
 
   /** The denominator of the fraction. Must be non-negative. */
-  BigInteger denom;
+  private BigInteger denom;
 
 
   // +--------------+-------------------------------------------------
@@ -62,7 +49,6 @@ public class BigFraction {
   /**
    * Build a new fraction with numerator num and denominator denom.
    *
-   * Warning! Not yet stable.
    *
    * @param numerator
    *   The numerator of the fraction.
@@ -83,7 +69,6 @@ public class BigFraction {
   /**
    * Build a new fraction with numerator num and denominator denom.
    *
-   * Warning! Not yet stable.
    *
    * @param numerator
    *   The numerator of the fraction.
@@ -104,20 +89,19 @@ public class BigFraction {
   /**
    * Build a new fraction by parsing a string.
    *
-   * Warning! Not yet implemented.
    *
    * @param str
    *   The fraction in string form
    */
   public BigFraction(String str) {
     if (str.contains("/")) {
-      this.num = BigInteger.valueOf(Integer.parseInt(str.substring(0, str.indexOf((int)'/'))));
-      this.denom = BigInteger.valueOf(Integer.parseInt(str.substring(str.indexOf((int)'/') + 1)));
+      this.num = BigInteger.valueOf(Integer.parseInt(str.substring(0, str.indexOf((int) '/'))));
+      this.denom = BigInteger.valueOf(Integer.parseInt(str.substring(str.indexOf((int) '/') + 1)));
     } else {
       this.num = BigInteger.valueOf(Integer.parseInt(str));
       this.denom = BigInteger.ONE;
     } // if/else
-    
+
     // Make negative
     if (this.denom.compareTo(BigInteger.ZERO) < 0) {
       this.num = this.num.negate();
@@ -204,7 +188,14 @@ public class BigFraction {
     return this.num + "/" + this.denom;
   } // toString()
 
-
+  /**
+   * Multiplies two fractions and returns the resulting BigFraction.
+   *
+   * @param a
+   *    the big fraction to multiply by.
+   * @return
+   *    The result of muliplying two big fractions.
+   */
   public BigFraction multiply(BigFraction a) {
     return new BigFraction(this.num.multiply(a.num), this.denom.multiply(a.denom)).simplify();
   } //multiply(BigFraction, BigFraction)
@@ -214,11 +205,13 @@ public class BigFraction {
   /**
    * Divides two BigFractions and returns the resulting BigFraction.
    *
+   * @param a the BigFraction to divide by, it can't have a denominator
+   * of zero.
+   *
    * @return a bigfraction representing the result of dividing the
    * two bigfractions.
    */
   public BigFraction divide(BigFraction a) {
-    
     BigInteger resultNumerator;
     BigInteger resultDenominator;
 
@@ -234,6 +227,8 @@ public class BigFraction {
 
   /**
    * Subtracts two BigFractions and returns the resulting BigFraction.
+   *
+   * @param a the BigFraction which you are subtracting by.
    *
    * @return a bigfraction representing the result of subtracting the
    * two bigfractions.
@@ -272,7 +267,7 @@ public class BigFraction {
    * @return a bigfraction representing the result of simplifying the
    * given bigfraction.
    */
-  public BigFraction simplify(){
+  public BigFraction simplify() {
     BigInteger resultNumerator = this.num.divide(this.num.gcd(this.denom));
     BigInteger resultDenominator = this.denom.divide(this.num.gcd(this.denom));
 
